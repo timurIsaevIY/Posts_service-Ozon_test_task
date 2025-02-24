@@ -1,0 +1,49 @@
+scalar Time
+
+type Post {
+  id: ID!
+  createdAt: Time!
+  name: String!
+  author: String!
+  content: String!
+  commentsAllowed: Boolean!
+  comments(page: Int!, pageSize: Int!):[Comment!]
+}
+
+type Comment{
+  id: ID!
+  createdAt: Time!
+  author: String!
+  content: String!
+  post: ID!
+  replies: [Comment!]
+  replyTo: ID
+}
+
+input InputComment{
+  author: String!
+  content: String!
+  post: ID!
+  replyTo: ID
+}
+
+input InputPost{
+  name: String!
+  content: String!
+  author: String!
+  commentsAllowed: Boolean!
+}
+
+type Query{
+  GetAllPosts(page: Int!, pageSize: Int!): [Post!]!
+  GetPostById(id: Int!): Post!
+}
+
+type Mutation{
+  CreatePost(post: InputPost!):Post!
+  CreateComment(input: InputComment!): Comment!
+}
+
+type Subscription{
+  CommentsSubscription(postId:ID!):Comment!
+}
